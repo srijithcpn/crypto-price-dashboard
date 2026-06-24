@@ -9,12 +9,24 @@ st.title("🚀 Crypto Price Dashboard")
 url = "https://api.coingecko.com/api/v3/simple/price"
 
 params = {
-    "ids": "bitcoin,ethereum,solana,dogecoin",
-    "vs_currencies": "inr"
+"ids": "bitcoin,ethereum,solana,dogecoin",
+"vs_currencies": "inr"
 }
 
-response = requests.get(url, params=params)
+try:
+response = requests.get(url, params=params, timeout=10)
+
+```
+if response.status_code != 200:
+    st.error(f"API Error: {response.status_code}")
+    st.stop()
+
 data = response.json()
+
+if "bitcoin" not in data:
+    st.error("Unexpected API response received.")
+    st.write(data)
+    st.stop()
 
 btc = data["bitcoin"]["inr"]
 eth = data["ethereum"]["inr"]
@@ -42,3 +54,7 @@ st.divider()
 st.write(
     f"Last Updated: {datetime.now().strftime('%d-%m-%Y %H:%M:%S')}"
 )
+```
+
+except Exception as e:
+st.error(f"Application Error: {e}")
