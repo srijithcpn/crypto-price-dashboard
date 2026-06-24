@@ -13,20 +13,18 @@ params = {
 "vs_currencies": "inr"
 }
 
-try:
 response = requests.get(url, params=params, timeout=10)
 
-```
 if response.status_code != 200:
-    st.error(f"API Error: {response.status_code}")
-    st.stop()
+st.error(f"API Error: {response.status_code}")
+st.stop()
 
 data = response.json()
 
 if "bitcoin" not in data:
-    st.error("Unexpected API response received.")
-    st.write(data)
-    st.stop()
+st.error("Unexpected API response")
+st.write(data)
+st.stop()
 
 btc = data["bitcoin"]["inr"]
 eth = data["ethereum"]["inr"]
@@ -36,25 +34,21 @@ doge = data["dogecoin"]["inr"]
 col1, col2 = st.columns(2)
 
 with col1:
-    st.metric("₿ Bitcoin", f"₹{btc:,.0f}")
+st.metric("₿ Bitcoin", f"₹{btc:,.0f}")
 
 with col2:
-    st.metric("Ξ Ethereum", f"₹{eth:,.0f}")
+st.metric("Ξ Ethereum", f"₹{eth:,.0f}")
 
 col3, col4 = st.columns(2)
 
 with col3:
-    st.metric("◎ Solana", f"₹{sol:,.2f}")
+st.metric("◎ Solana", f"₹{sol:,.2f}")
 
 with col4:
-    st.metric("🐕 Dogecoin", f"₹{doge:,.2f}")
+st.metric("🐕 Dogecoin", f"₹{doge:,.2f}")
 
 st.divider()
 
 st.write(
-    f"Last Updated: {datetime.now().strftime('%d-%m-%Y %H:%M:%S')}"
+f"Last Updated: {datetime.now().strftime('%d-%m-%Y %H:%M:%S')}"
 )
-```
-
-except Exception as e:
-st.error(f"Application Error: {e}")
