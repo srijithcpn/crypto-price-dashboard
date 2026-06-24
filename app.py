@@ -4,21 +4,31 @@ from datetime import datetime
 
 st.set_page_config(page_title="Crypto Price Dashboard", layout="wide")
 
-st.title("🚀 Crypto Price Dashboard")
+st.title(" Crypto Price Dashboard")
 
 url = "https://api.coingecko.com/api/v3/simple/price"
 
 params = {
-    "ids": "bitcoin,ethereum,solana,dogecoin",
-    "vs_currencies": "inr"
+"ids": "bitcoin,ethereum,solana,dogecoin",
+"vs_currencies": "inr"
 }
 
-response = requests.get(url, params=params)
-data = response.json()
+response = requests.get(
+url,
+params=params,
+timeout=10,
+headers={"User-Agent": "Mozilla/5.0"}
+)
 
 
 
-if "bitcoin" in data:
+if response.status_code == 200:
+
+  data = response.json()
+  
+ 
+  if "bitcoin" in data:
+
     btc = data["bitcoin"]["inr"]
     eth = data["ethereum"]["inr"]
     sol = data["solana"]["inr"]
@@ -43,5 +53,5 @@ if "bitcoin" in data:
 st.divider()
 
 st.write(
-    f"Last Updated: {datetime.now().strftime('%d-%m-%Y %H:%M:%S')}"
+f"Last Updated: {datetime.now().strftime('%d-%m-%Y %H:%M:%S')}"
 )
